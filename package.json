@@ -1,0 +1,26 @@
+{
+  "name": "react-dev-env",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ipsum225/react-dev-env.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ipsum225/react-dev-env/issues"
+  },
+  "homepage": "https://github.com/ipsum225/react-dev-env#readme",
+  "devDependencies": {
+    "webpack": "^5.37.1",
+    "webpack-cli": "^4.7.0",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
