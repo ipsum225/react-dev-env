@@ -14,6 +14,7 @@ npm init -y
 ```
 
 1. 安装 [webpack](https://webpack.js.org/)
+
     ```shell
     npm i -D webpack webpack-cli webpack-dev-server
     ```
@@ -49,14 +50,12 @@ npm init -y
     以上为运行webpack命令最简配置  
     修改package.json文件中的script的值  
     删除test命令并添加build
-    ```javscript
+    ```json
     {
-      // ...
       "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "webpack --watch"
       }
-      // ...
     }
     ```
     通过运行一下命令 可从src/index.js文件为起点  
@@ -71,39 +70,34 @@ npm init -y
     向package.json中添加一条新命令
     ```json
     {
-      // ...
       "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "build": "webpack --watch",
         "dev": "webpack serve"
       }
-      // ...
     }
     ```
-
     向webpack.config.js中添加devServer
     ```javascript
     const path = require('path');
     module.exports = {
-      // ...
       devServer: {
         contentBase: path.join(__dirname, 'dist'),
         disableHostCheck: true,
         inline: true,
         hot: true,
         port: 8080,
-        host: '0.0.0.0',    // 其他设备也可以访问
+        host: '0.0.0.0',
         hot: true,
         overlay: {
-          errors: true //编译过程中的错误会显示到页面上
+          errors: true
         },
         stats: {
           colors: true,
           reasons: true,
           chunks: false
         }
-      },
-      // ...
+      }
     }
     ```
     之后便可以通过以下命令开启服务 访问http://localhost:8080访问页面  
@@ -111,4 +105,89 @@ npm init -y
     ```
     npm run dev
     ```
-2. 
+
+
+2. 安装 [babel](https://babeljs.io/) babel-loader 和 plugin
+    
+    通过babel将代码转换为向后兼容的JS版本
+    ```shell
+    npm i --save-dev babel-loader @babel/core
+    npm i -D @babel/preset-es2015 @babel/preset-react
+    npm install --save-dev @babel/plugin-transform-arrow-functions
+    npm install --save-dev @babel/plugin-proposal-class-properties
+    ```
+    > ⚠️ NOTE: @babel/plugin-transform-arrow-functions is included in @babel/preset-env
+    > ⚠️ NOTE: @babel/plugin-proposal-class-properties is included in @babel/preset-env
+    
+    修改webpack.config.js文件
+    ```js
+    module.exports = {
+
+      module: {
+        rules: [
+          {
+            test: /\.js$/,
+            use: {
+              loader: 'babel-loader'
+            },
+            exclude: /node_modules/,
+            include: path.join(__dirname, 'src'),
+          },
+        ]
+      },
+
+    }
+    ```
+    在根目录下创建.babelrc文件
+    ```json
+    {
+      "presets": [
+        [
+          "@babel/preset-env",
+          {
+            "useBuiltIns": "entry"
+          }
+        ],
+        "@babel/preset-react"
+      ],
+      "plugins": [
+        "@babel/plugin-proposal-class-properties",
+        "@babel/plugin-transform-arrow-functions"
+      ]
+    }
+    ```
+
+
+3. 安装 [react](https://reactjs.org/) 和 [html-webpack-plugin](https://webpack.js.org/plugins/html-webpack-plugin/)
+    ```shell
+    npm i react react-dom
+    npm i -D html-webpack-plugin
+    ```
+    在webpack.config.js中配置plugin
+    ```js
+    const htmlWebpackPlugin = require('html-webpack-plugin')
+
+    module.exports = {
+      plugins: [
+        new htmlWebpackPlugin({
+          template: path.join(__dirname, 'src', 'index.html'),
+          hash: true
+        })
+      ]
+    }
+    ```
+    在src下新建template文件夹并在其中新建index.html文件
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title> React App </title>
+      </head>
+      <body>
+        <div id="root"></div>
+      </body>
+    </html>
+    ```
