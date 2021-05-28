@@ -110,6 +110,4 @@ npm init -y
   ```
   npm run dev
   ```
-
-
 2. 
